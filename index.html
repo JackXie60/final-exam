@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            width: 400px;
+            height: 350px;
+            background-color: #ccc;
+            display: block;
+            border: 3px dotted rgb(46, 36, 36);
+        }
+        .authCode{
+            display: inline-block;
+            width: 50px;
+        }
+        .submit-tr{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <table border="1">
+            <tr>
+                <td>用户名</td>
+                <td>
+                    <input type="text" class="userName">
+                </td>
+            </tr>
+            <tr>
+                <td>密码</td>
+                <td>
+                    <input type="password" class="password">
+                </td>
+            </tr>
+            <tr>
+                <td>确认密码</td>
+                <td>
+                    <input type="password" class="comfirmPassword">
+                </td>
+            </tr>
+            <tr>
+                <td>性别</td>
+                <td>
+                    <input type="radio" checked name="gender" id="" value="male">男
+                    <input type="radio" name="gender" id="" value="female">女
+                </td>
+            </tr>
+            <tr>
+                <td>学历</td>
+                <td>
+                    <select name="edu" style="width: 100px;" class="edu">
+                        <option value="小学">小学</option>
+                        <option value="初中">初中</option>
+                        <option value="高中">高中</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>爱好</td>
+                <td>
+                    <select name="hobby" style="width: 100px;height: 100px;" multiple class="hobby">
+                        <option value="音乐">音乐</option>
+                        <option value="科技">科技</option>
+                        <option value="体育">体育</option>
+                        <option value="读书">读书</option>
+                        <option value="游泳">游泳</option>
+                        <option value="散步">散步</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>验证码</td>
+                <td>
+                    <input type="text" class="inputAuthCode">
+                    <span class="authCode">FGHJ</span>
+                    <button class="getAuthCode">获取验证码</button>
+                </td>
+            </tr>
+            <tr  class="submit-tr">
+                <td colspan="2" class="submit-td">
+                    <button class="submit-btn">提交</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        //获取用户名和密码的dom元素
+        const userName = document.getElementsByClassName("userName")[0];
+        const password = document.getElementsByClassName("password")[0];
+        const comfirmPassword = document.getElementsByClassName("comfirmPassword")[0];
+        //获取学历和爱好的select元素以及性别的input元素
+        const gender = document.getElementsByName("gender");
+        const edu = document.getElementsByClassName("edu")[0];
+        const hobby = document.getElementsByClassName("hobby")[0];
+        //获取验证码的span元素以及获取验证码的按钮
+        const inputAuthCode = document.getElementsByClassName("inputAuthCode")[0];
+        const authCode = document.getElementsByClassName("authCode")[0];
+        const getAuthCode = document.getElementsByClassName("getAuthCode")[0];
+        //获取提取按钮
+        const submitBtn = document.getElementsByClassName("submit-btn")[0];
+
+        //点击获取验证码按钮，获取随机验证码
+        getAuthCode.onclick = function(){
+            const randomAuthCode = Math.random().toString(16).substr(-4);
+            authCode.innerHTML = randomAuthCode;
+        }
+        //点击提交按钮，触发事件
+        submitBtn.onclick = function(){
+            //获取需要表格中元素的值;
+            const userNameValue = userName.value;
+            const passwordValue = password.value;
+            const comfirmPasswordValue = comfirmPassword.value;
+            let genderValue = "";
+            for(let i = 0; i < gender.length; i++){
+                if(gender[i].checked){
+                    genderValue = gender[i].value;
+                }
+            }
+            let eduValue = "";
+            for(let i = 0; i < edu.children.length; i++){
+                if(edu.children[i].selected){
+                    eduValue = edu.children[i].value;
+                }
+            }
+            let hobbyArr = [];
+            for(let i = 0; i < hobby.children.length; i++){
+                if(hobby.children[i].selected){
+                    hobbyArr.push(hobby.children[i].value);
+                }
+            }
+            const authCodeValue = authCode.innerHTML;
+            //判断用户名与密码是否为空
+            if(!userNameValue.length||!passwordValue.length){          
+               alert("用户名与密码不能为空");
+               return;
+            }
+            //判断密码长度是否小于6
+            if(passwordValue.length<6){
+                alert("密码长度不能少于6");
+                return;
+            }
+            //判断两次密码是否输入一致
+            if(passwordValue!==comfirmPasswordValue){
+                console.log(passwordValue,comfirmPasswordValue)
+                alert("密码输入不一致");
+                return;
+            }
+            if(inputAuthCode.value !== authCodeValue){
+                alert("验证码输入不正确");
+                return;
+            }
+            myWindow = window.open('', '', 'width=500,height=500');
+            myWindow.document.write(`<p>用户名：${userNameValue}</p>
+            <p>密码：${passwordValue}</p>
+            <p>性别：${genderValue=="male"?"男":"女"}</p>
+            <p>学历：${eduValue}</p>
+            <p>爱好：${hobbyArr.toString()}</p>`);
+            myWindow.focus();
+        }
+    </script>
+</body>
+</html>
