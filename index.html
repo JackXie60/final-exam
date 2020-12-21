@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input.column {
+            margin-left: 20px;
+        }
+        table{
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        table td{
+            height: 30px;
+            width: 50px;
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <input type="text" class="row">
+            行数
+            <input type="text" class="column">
+            列数
+            <button class="addTable">添加表格</button>
+        </div>
+        <div class="content">
+            <table>
+
+            </table>
+        </div>
+    </div>
+    <script>
+        const inpRow = document.getElementsByClassName("row")[0];
+        const inpColumn = document.getElementsByClassName("column")[0];
+        const addTable = document.getElementsByClassName("addTable")[0];
+        addTable.onclick = function(){
+            const table = document.getElementsByTagName("table")[0];
+            const row = Number(inpRow.value);
+            const column = Number(inpColumn.value);
+            let str = ""
+            if(!isNaN(row) && !isNaN(column)){
+                console.log(row,column)
+                for(let i = 0; i < row; i++){
+                    str += "<tr>"
+                    for(let j = 1; j <= column; j++){
+                        str += `<td>${i*column+j}</td>`;
+                    }
+                    str += "</tr>"
+                }
+                table.innerHTML = str;
+            }
+            else{
+                alert("行列数必须为数字");
+            }
+        }
+    </script>
+</body>
+
+</html>
